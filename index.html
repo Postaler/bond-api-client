@@ -1,20 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Bond Web Service</title>
+  <meta charset="UTF-8" />
+  <title>James Bond Films Web Service Client</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body { font-family: georgia; }
+    body {
+      font-family: Georgia, serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background-color: #f9f9f9;
+    }
 
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .category {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #0077cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .category:hover {
+      background-color: #005fa3;
+    }
+
+    .film {
+      border: 1px solid #E77DC2;
+      border-radius: 5px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      position: relative;
+      background-color: white;
+    }
+
+    .pic {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+
+    .pic img {
+      max-width: 80px;
+      border-radius: 4px;
+    }
+
+    #loader {
+      display: none;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    #output {
+      margin-top: 2rem;
+    }
   </style>
 </head>
 <body>
-  <h1>Bond Web Service</h1>
-  <a href="year" class="category">Bond Films By Year</a><br />
-  <a href="box" class="category">Bond Films By International Box Office Totals</a>
-  <h3 id="filmtitle">Title Will Go Here</h3>
-  <div id="films"><p>Films will go here</p></div>
-  <div id="output">Results go here</div>
+  <h1>James Bond Films Web Service Client</h1>
+  <p>This page uses AJAX to fetch and display data from a JSON-based Bond Films web service. Select a category below to view sorted results:</p>
+
+  <a href="year" class="category">Films by Year</a>
+  <a href="box" class="category">Films by Box Office</a>
+
+  <h3 id="filmtitle">Results will appear below:</h3>
+
+  <div id="loader">
+    <img src="images/spinner.gif" alt="Loading..." />
+  </div>
+
+  <div id="output">Click a category to load films.</div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -27,19 +89,51 @@
       });
     });
 
-    var url = "https://newmanix.com/classes/it122/bond-web-service/";
+    const url = "https://newmanix.com/classes/it122/bond-web-service/";
+
     async function loadAJAX(cat) {
-      const endpoint = url + "api.php?cat=" + cat;
+      document.getElementById("output").innerHTML = "";
+      document.getElementById("filmtitle").innerHTML = "";
+      document.getElementById("loader").style.display = "block";
+
+      const endpoint = `${url}api.php?cat=${cat}`;
+
       try {
         const response = await fetch(endpoint, { method: "GET", mode: "cors" });
         if (!response.ok) throw new Error("HTTP error " + response.status);
         const data = await response.json();
         console.log(data);
+
+        document.getElementById("filmtitle").innerHTML = data.title;
+        document.getElementById("output").innerHTML = "";
+
+        data.films.forEach(film => {
+          const filmHTML = bondTemplate(film);
+          document.getElementById("output").innerHTML += filmHTML;
+        });
+
       } catch (err) {
         document.getElementById("output").innerText = "Error loading data: " + err;
+      } finally {
+        document.getElementById("loader").style.display = "none";
       }
     }
 
+    function bondTemplate(film) {
+      return `<div class="film">
+        <b>Film:</b> ${film.Film}<br>
+        <b>Title:</b> ${film.Title}<br>
+        <b>Year:</b> ${film.Year}<br>
+        <b>Director:</b> ${film.Director}<br>
+        <b>Producers:</b> ${film.Producers}<br>
+        <b>Bond:</b> ${film.Bond}<br>
+        <b>Writers:</b> ${film.Writers}<br>
+        <b>Composer:</b> ${film.Composer}<br>
+        <b>Budget:</b> ${film.Budget}<br>
+        <b>Box Office:</b> ${film.BoxOffice}<br>
+        <div class="pic"><img src="${url}thumbnails/${film.ImageURL}" alt="${film.Title} poster" /></div>
+      </div>`;
+    }
   </script>
 </body>
 </html>
