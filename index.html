@@ -140,7 +140,7 @@
         <div class="pic">
           <img src="images/${base}.jfif"
                alt="${film.Title} poster"
-               onerror="if (!this.dataset.fallback) { this.dataset.fallback = true; this.src='images/placeholder.jpg'; }">
+               onerror="this.style.display='none';">
         </div>
       </div>`;
     }
