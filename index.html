@@ -119,21 +119,32 @@
       }
     }
 
-    function bondTemplate(film) {
-      return `<div class="film">
-        <b>Film:</b> ${film.Film}<br>
-        <b>Title:</b> ${film.Title}<br>
-        <b>Year:</b> ${film.Year}<br>
-        <b>Director:</b> ${film.Director}<br>
-        <b>Producers:</b> ${film.Producers}<br>
-        <b>Bond:</b> ${film.Bond}<br>
-        <b>Writers:</b> ${film.Writers}<br>
-        <b>Composer:</b> ${film.Composer}<br>
-        <b>Budget:</b> ${film.Budget}<br>
-        <b>Box Office:</b> ${film.BoxOffice}<br>
-        <div class="pic"><img src="${url}thumbnails/${film.ImageURL}" alt="${film.Title} poster" /></div>
-      </div>`;
-    }
+function bondTemplate(film) {
+  const filmName = (film.Film || '').toString();
+  const base = filmName.toLowerCase().replace(/:/g, '').replace(/\s+/g, '_');
+
+  return `<div class="film">
+    <b>Film:</b> ${film.Film}<br>
+    <b>Title:</b> ${film.Title}<br>
+    <b>Year:</b> ${film.Year}<br>
+    <b>Director:</b> ${film.Director}<br>
+    <b>Producers:</b> ${film.Producers}<br>
+    <b>Bond:</b> ${film.Bond}<br>
+    <b>Writers:</b> ${film.Writers}<br>
+    <b>Composer:</b> ${film.Composer}<br>
+    <b>Budget:</b> ${film.Budget}<br>
+    <b>Box Office:</b> ${film.BoxOffice}<br>
+    <div class="pic">
+      <picture>
+        <source srcset="images/${base}.webp" type="image/webp">
+        <source srcset="images/${base}.jfif" type="image/jfif">
+        <img src="images/${base}.jpg" alt="${film.Title} poster" onerror="this.src='images/placeholder.jpg'">
+      </picture>
+    </div>
+  </div>`;
+}
+
+
   </script>
 </body>
 </html>
