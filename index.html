@@ -126,8 +126,13 @@
       .replace(/\.\w+$/, '.png')
       .replace(/^./, c => c.toUpperCase());
 
+
+
+        console.log('Image URL used:', imageFile); // ← ADD THIS
+
+
     imageTag = `<div class="pic"><img src="images/${imageFile}" alt="${film.Title || 'Bond'} poster" /></div>`;
-  }
+    }
 
   return `<div class="film">
     <b>Film:</b> ${film.Film}<br>
