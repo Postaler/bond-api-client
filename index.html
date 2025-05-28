@@ -121,18 +121,13 @@
 
   function bondTemplate(film) {
   let imageTag = '';
-  if (film.ImageURL) {
-    const imageFile = film.ImageURL
-      .replace(/\.\w+$/, '.png')
-      .replace(/^./, c => c.toUpperCase());
-
-
-
-        console.log('Image URL used:', imageFile); // ← ADD THIS
-
+  if (film.Image) {
+    const imageFile = film.Image
+      .replace(/\.\w+$/, '.png')             // force .png
+      .replace(/^./, c => c.toUpperCase());  // capitalize first letter
 
     imageTag = `<div class="pic"><img src="images/${imageFile}" alt="${film.Title || 'Bond'} poster" /></div>`;
-    }
+  }
 
   return `<div class="film">
     <b>Film:</b> ${film.Film}<br>
@@ -148,6 +143,7 @@
     ${imageTag}
   </div>`;
 }
+
 
 
   </script>
