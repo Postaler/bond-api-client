@@ -120,11 +120,9 @@
     }
 
     function bondTemplate(film) {
-      const filmName = (film.Film || '').toString();
-      const base = filmName
-        .toLowerCase()
-        .replace(/[:.]/g, '')      // remove colons and periods
-        .replace(/\s+/g, '_');     // replace spaces with underscores
+      const imageFile = film.ImageURL
+        ? film.ImageURL.replace(/\.\w+$/, '.png')
+        : 'default.png'; // fallback image
 
       return `<div class="film">
         <b>Film:</b> ${film.Film}<br>
@@ -138,9 +136,7 @@
         <b>Budget:</b> ${film.Budget}<br>
         <b>Box Office:</b> ${film.BoxOffice}<br>
         <div class="pic">
-          <img src="images/${base}.jfif"
-               alt="${film.Title} poster"
-               onerror="this.remove();">
+          <img src="${url}thumbnails/${imageFile}" alt="${film.Title || 'Bond'} poster" />
         </div>
       </div>`;
     }
