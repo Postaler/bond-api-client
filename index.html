@@ -122,12 +122,15 @@
   function bondTemplate(film) {
   let imageTag = '';
   if (film.Image) {
-    const imageFile = film.Image
-      .replace(/\.\w+$/, '.png')             // force .png
-      .replace(/^./, c => c.toUpperCase());  // capitalize first letter
+  const imageFile = film.Image
+    .replace(/\.\w+$/, '.png')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 
-    imageTag = `<div class="pic"><img src="images/${imageFile}" alt="${film.Title || 'Bond'} poster" /></div>`;
-  }
+  imageTag = `<div class="pic"><img src="images/${imageFile}" alt="${film.Title || 'Bond'} poster" /></div>`;
+}
+
 
   return `<div class="film">
     <b>Film:</b> ${film.Film}<br>
